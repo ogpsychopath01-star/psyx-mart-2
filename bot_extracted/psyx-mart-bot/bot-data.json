@@ -144,9 +144,9 @@
   "message_stats": {
     "1521929465817465005": {
       "812192341179236382": {
-        "daily": 5,
-        "weekly": 5,
-        "alltime": 5
+        "daily": 6,
+        "weekly": 6,
+        "alltime": 6
       }
     },
     "1502159810869858364": {
@@ -360,5 +360,9 @@
     }
   ],
   "sell_transcripts": [],
-  "sell_counter": {}
+  "sell_counter": {},
+  "disabled_guild_commands": {},
+  "disabled_guild_categories": {},
+  "disabled_global_commands": [],
+  "disabled_global_categories": []
 }
