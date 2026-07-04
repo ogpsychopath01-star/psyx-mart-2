@@ -18,7 +18,7 @@ import helpCommands from './commands/help.js';
 import tempvcCommands from './commands/tempvc.js';
 import roleCommands from './commands/giverole.js';
 import bioCommands from './commands/bio.js';
-import giveawayCommands, { setupGiveawayTimers } from './commands/giveaway.js';
+import giveawayCommands, { setupGiveawayTimers, setupAutoGiveawayScheduler } from './commands/giveaway.js';
 import ticketCommands from './commands/tickets.js';
 import setupCommands from './commands/setup.js';
 import jailCommands from './commands/jail.js';
