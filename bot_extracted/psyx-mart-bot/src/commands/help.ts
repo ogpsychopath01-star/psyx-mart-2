@@ -62,10 +62,9 @@ function buildMainHelpEmbed(categories: string[], totalCmds: number) {
     .setColor(COLORS.primary)
     .setTitle('🌟  PSYX MART Bot — Command Centre')
     .setDescription(
-      `> ✦ **Prefix:** \`${PREFIX}\`  •  **Mention:** @PSYX MART  •  **No-prefix** (if granted by staff)\n` +
-      `> ✦ **${categories.length} categories** • **${totalCmds}+ commands**\n\n` +
-      `🌐 **Social** → \`!stain\` \`!meme\` \`!8ball\`  🛍️ **Sell** → \`!sell\` \`!deal\`  🎊 **Giveaway** → \`!giveaway\`\n\n` +
-      `📂  **Select a category from the dropdown below to view its commands.**`
+      `> **Prefix:** \`${PREFIX}\`  •  **Mention:** @PSYX MART  •  **No-prefix** *(if granted by staff)*\n` +
+      `> **${categories.length} categories**  •  **${totalCmds}+ commands**\n\n` +
+      `📂  Select a category from the dropdown below to browse commands.`
     )
     .addFields(fields)
     .setFooter({ text: '✦ PSYX MART Bot • Made by ogpsyx  •  Menu expires in 2 minutes' })
