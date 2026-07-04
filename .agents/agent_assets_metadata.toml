@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "TgDqyt1vrzNh3DrzmwoYK"
+uri = "file://bot_extracted/psyx-mart-bot-v4-final.tar.gz"
+type = "unspecified"
+title = "PSYX MART Bot v4 Final — psyx-mart-bot-v4-final.tar.gz"

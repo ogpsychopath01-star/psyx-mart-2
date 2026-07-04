@@ -1,0 +1,364 @@
+{
+  "warnings": [],
+  "mutes": {},
+  "vc_bans": {},
+  "afk": {
+    "1420032376574054400": {
+      "reason": "dinner",
+      "timestamp": 1783090139162,
+      "dm_notifications": true
+    }
+  },
+  "guild_settings": {},
+  "log_settings": {
+    "1502159810869858364": {
+      "joinleave": "1522614922410856549",
+      "antinuke": "1522614925749653727",
+      "automod": "1522614929474060408",
+      "automodlog": "1522614929474060408",
+      "vclog": "1522614933005668462",
+      "rolelog": "1522614936704909392",
+      "memberslog": "1522614940408479814",
+      "commandlog": "1522614947543257178",
+      "boostlog": "1522614951460606085",
+      "ticketlog": "1522614955491463238",
+      "selllog": "1522614959295435044",
+      "vouchlog": "1522614962911051927",
+      "auditlog": "1522614966820147230",
+      "messagelog": "1522614944061722644"
+    }
+  },
+  "automod_settings": {
+    "1502159810869858364": {
+      "antilink": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      },
+      "antiraid": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      },
+      "antispam": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      },
+      "regprotect": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      },
+      "antibot": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      },
+      "antirolead": {
+        "enabled": false,
+        "punishment": "warn",
+        "extra": ""
+      }
+    }
+  },
+  "welcome_settings": {
+    "1502159810869858364": {
+      "channel_id": "1522615923435897013",
+      "message": "Welcome to **{server}**, {user}! You are member #{membercount} 🎉",
+      "enabled": false
+    }
+  },
+  "leave_settings": {
+    "1502159810869858364": {
+      "channel_id": "1522615923435897013",
+      "message": "{user} has left **{server}**. Goodbye! 👋",
+      "enabled": true
+    }
+  },
+  "tempvc_settings": {
+    "1502159810869858364": {
+      "trigger_channel_id": "1522617158910349393",
+      "interface_channel_id": "1522615923435897013",
+      "enabled": false,
+      "panel_message_id": "1522617211133366493"
+    }
+  },
+  "active_tempvcs": {},
+  "nsfw_access": {},
+  "nopfx_access": {
+    "1470676321083330604": {
+      "granted_by": "812192341179236382",
+      "expires_at": 0
+    },
+    "1417897433840484464": {
+      "granted_by": "812192341179236382",
+      "expires_at": 0
+    },
+    "1420032376574054400": {
+      "granted_by": "812192341179236382",
+      "expires_at": 0
+    }
+  },
+  "bot_roles": {},
+  "voice_stats": {
+    "1502159810869858364": {
+      "812192341179236382": {
+        "daily": 3119,
+        "weekly": 3119,
+        "alltime": 3119,
+        "last_join": 1783090199565
+      },
+      "1417897433840484464": {
+        "daily": 5916,
+        "weekly": 5916,
+        "alltime": 5916,
+        "last_join": 1783090658919
+      },
+      "1521517071022817321": {
+        "daily": 1735,
+        "weekly": 1735,
+        "alltime": 1735,
+        "last_join": 1783088934513
+      },
+      "894759129699197008": {
+        "daily": 0,
+        "weekly": 0,
+        "alltime": 0,
+        "last_join": 1783087252198
+      },
+      "1470676321083330604": {
+        "daily": 67,
+        "weekly": 67,
+        "alltime": 67,
+        "last_join": 1783090257588
+      },
+      "1420032376574054400": {
+        "daily": 0,
+        "weekly": 0,
+        "alltime": 0,
+        "last_join": 1783089369825
+      }
+    }
+  },
+  "message_stats": {
+    "1521929465817465005": {
+      "812192341179236382": {
+        "daily": 5,
+        "weekly": 5,
+        "alltime": 5
+      }
+    },
+    "1502159810869858364": {
+      "812192341179236382": {
+        "daily": 141,
+        "weekly": 141,
+        "alltime": 141
+      },
+      "1417897433840484464": {
+        "daily": 435,
+        "weekly": 435,
+        "alltime": 435
+      },
+      "1470676321083330604": {
+        "daily": 199,
+        "weekly": 199,
+        "alltime": 199
+      },
+      "894759129699197008": {
+        "daily": 33,
+        "weekly": 33,
+        "alltime": 33
+      },
+      "1521517071022817321": {
+        "daily": 6,
+        "weekly": 6,
+        "alltime": 6
+      },
+      "1420032376574054400": {
+        "daily": 22,
+        "weekly": 22,
+        "alltime": 22
+      }
+    },
+    "1510693342563012728": {
+      "812192341179236382": {
+        "daily": 4,
+        "weekly": 4,
+        "alltime": 4
+      },
+      "1417897433840484464": {
+        "daily": 1,
+        "weekly": 1,
+        "alltime": 1
+      }
+    }
+  },
+  "bot_247": {},
+  "bios": {
+    "1502159810869858364": {
+      "1417897433840484464": ""
+    }
+  },
+  "giveaways": {
+    "1522617604940763227": {
+      "messageId": "1522617604940763227",
+      "channelId": "1522607592684388446",
+      "guildId": "1502159810869858364",
+      "prize": "2 laat",
+      "hostId": "1417897433840484464",
+      "endTime": 1783090845664,
+      "winnerCount": 1,
+      "ended": true,
+      "winners": [
+        "1470676321083330604"
+      ]
+    },
+    "1522617962668753019": {
+      "messageId": "1522617962668753019",
+      "channelId": "1522607592684388446",
+      "guildId": "1502159810869858364",
+      "prize": "2 mukke",
+      "hostId": "1417897433840484464",
+      "endTime": 1783090930912,
+      "winnerCount": 1,
+      "ended": true,
+      "winners": [
+        "1417897433840484464"
+      ]
+    },
+    "1522618464357843087": {
+      "messageId": "1522618464357843087",
+      "channelId": "1522607592684388446",
+      "guildId": "1502159810869858364",
+      "prize": "🙂",
+      "hostId": "1417897433840484464",
+      "endTime": 1783091050471,
+      "winnerCount": 1,
+      "ended": true,
+      "winners": []
+    },
+    "1522618549707735102": {
+      "messageId": "1522618549707735102",
+      "channelId": "1522607592684388446",
+      "guildId": "1502159810869858364",
+      "prize": "🙂",
+      "hostId": "1417897433840484464",
+      "endTime": 1783091070896,
+      "winnerCount": 1,
+      "ended": true,
+      "winners": []
+    }
+  },
+  "bot_config": {},
+  "ticket_settings": {
+    "1502159810869858364": {
+      "panel_channel_id": "1522622100907626526",
+      "category_id": "1522615923435897013",
+      "panel_message_id": "1522622200480403577",
+      "enabled": true,
+      "custom_buttons": [
+        {
+          "id": "ticket_support",
+          "label": "General Support",
+          "emoji": "🛠️",
+          "style": "Primary"
+        },
+        {
+          "id": "ticket_report",
+          "label": "Report a User",
+          "emoji": "🚨",
+          "style": "Danger"
+        },
+        {
+          "id": "ticket_appeal",
+          "label": "Ban Appeal",
+          "emoji": "⚖️",
+          "style": "Secondary"
+        },
+        {
+          "id": "ticket_suggestion",
+          "label": "Suggestion",
+          "emoji": "💡",
+          "style": "Success"
+        },
+        {
+          "id": "ticket_partnership",
+          "label": "Partnership",
+          "emoji": "🤝",
+          "style": "Primary"
+        },
+        {
+          "id": "ticket_giveaway",
+          "label": "Giveaway Claim",
+          "emoji": "🎉",
+          "style": "Success"
+        },
+        {
+          "id": "ticket_roleappeal",
+          "label": "Role Appeal",
+          "emoji": "👔",
+          "style": "Secondary"
+        }
+      ],
+      "ping_role_id": "1522622249260286045"
+    }
+  },
+  "active_tickets": {},
+  "ticket_counter": {
+    "1502159810869858364": 1
+  },
+  "autoresponder": {},
+  "autoreact": {},
+  "temp_roles": [],
+  "automod_whitelist": {
+    "1502159810869858364": [
+      "1522607592684388446"
+    ]
+  },
+  "automod_user_whitelist": {},
+  "automod_role_whitelist": {},
+  "media_only_channels": {},
+  "jail_settings": {
+    "1502159810869858364": {
+      "channel_id": "1522607754471014581",
+      "role_id": "1522607839171055807",
+      "enabled": true
+    }
+  },
+  "jailed_users": {},
+  "guild_banners": {},
+  "guild_pfps": {},
+  "qr_codes": {
+    "1502159810869858364": {
+      "qr1": {
+        "url": "https://cdn.discordapp.com/attachments/1521948485832802434/1522595428099690526/qr_qr1.jpg",
+        "label": "",
+        "set_by": "812192341179236382",
+        "set_at": 1783085439434
+      }
+    }
+  },
+  "payment_info": {
+    "1502159810869858364": {
+      "qr1": {
+        "set_by": "812192341179236382",
+        "set_at": 1783085546145,
+        "upi_id": "ogpsyx"
+      }
+    }
+  },
+  "vouches": [
+    {
+      "guild_id": "1502159810869858364",
+      "buyer_id": "812192341179236382",
+      "seller_id": "1470676321083330604",
+      "message": "russian",
+      "rating": 5,
+      "timestamp": 1783085668922,
+      "id": 1
+    }
+  ],
+  "sell_transcripts": [],
+  "sell_counter": {}
+}
