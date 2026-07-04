@@ -85,6 +85,7 @@ interface DbData {
   disabled_guild_categories: Record<string, string[]>;
   disabled_global_commands: string[];
   disabled_global_categories: string[];
+  auto_giveaways: Record<string, AutoGiveaway>;
 }
 
 interface Warning { id: number; guild_id: string; user_id: string; reason: string; moderator_id: string; timestamp: number }
@@ -126,6 +127,19 @@ export interface Giveaway {
   ended: boolean;
   winners: string[];
 }
+
+export interface AutoGiveaway {
+  id: string;
+  guildId: string;
+  channelId: string;
+  scheduledTime: string;
+  duration: number;
+  winnerCount: number;
+  prize: string;
+  hostId: string;
+  active: boolean;
+  lastRun: number;
+}
 export interface BotConfig {
   status_type?: string;
   status_text?: string;
@@ -157,6 +171,7 @@ let data: DbData = {
   disabled_guild_categories: {},
   disabled_global_commands: [],
   disabled_global_categories: [],
+  auto_giveaways: {},
 };
 
 let saveTimeout: NodeJS.Timeout | null = null;
@@ -466,6 +481,20 @@ export function endGiveawayInDB(messageId: string, winners: string[]) {
   }
 }
 export function deleteGiveaway(messageId: string) { delete data.giveaways[messageId]; save(); }
+
+// ── AUTO GIVEAWAYS ─────────────────────────────────────────────────────────────
+export function createAutoGiveaway(id: string, guildId: string, channelId: string, scheduledTime: string, duration: number, winnerCount: number, prize: string, hostId: string): AutoGiveaway {
+  if (!data.auto_giveaways) data.auto_giveaways = {};
+  const entry: AutoGiveaway = { id, guildId, channelId, scheduledTime, duration, winnerCount, prize, hostId, active: true, lastRun: 0 };
+  data.auto_giveaways[id] = entry;
+  save();
+  return entry;
+}
+export function getAutoGiveaway(id: string): AutoGiveaway | undefined { return data.auto_giveaways?.[id]; }
+export function getAllAutoGiveaways(): Record<string, AutoGiveaway> { return data.auto_giveaways ?? {}; }
+export function updateAutoGiveawayLastRun(id: string, ts: number) { if (data.auto_giveaways?.[id]) { data.auto_giveaways[id].lastRun = ts; save(); } }
+export function deleteAutoGiveaway(id: string) { delete data.auto_giveaways?.[id]; save(); }
+export function getAutoGiveawaysByGuild(guildId: string): AutoGiveaway[] { return Object.values(data.auto_giveaways ?? {}).filter(g => g.guildId === guildId); }
 
 // ── BOT CONFIG ────────────────────────────────────────────────────────────────
 export function getBotConfig(key: keyof BotConfig): string | undefined { return data.bot_config[key]; }
