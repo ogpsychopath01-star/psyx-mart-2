@@ -2,13 +2,7 @@
   "warnings": [],
   "mutes": {},
   "vc_bans": {},
-  "afk": {
-    "1420032376574054400": {
-      "reason": "dinner",
-      "timestamp": 1783090139162,
-      "dm_notifications": true
-    }
-  },
+  "afk": {},
   "guild_settings": {},
   "log_settings": {
     "1502159810869858364": {
@@ -104,16 +98,16 @@
   "voice_stats": {
     "1502159810869858364": {
       "812192341179236382": {
-        "daily": 3119,
-        "weekly": 3119,
-        "alltime": 3119,
-        "last_join": 1783090199565
+        "daily": 7878,
+        "weekly": 7878,
+        "alltime": 7878,
+        "last_join": 1783196952587
       },
       "1417897433840484464": {
-        "daily": 5916,
-        "weekly": 5916,
-        "alltime": 5916,
-        "last_join": 1783090658919
+        "daily": 12749,
+        "weekly": 12749,
+        "alltime": 12749,
+        "last_join": 1783198307821
       },
       "1521517071022817321": {
         "daily": 1735,
@@ -128,42 +122,48 @@
         "last_join": 1783087252198
       },
       "1470676321083330604": {
-        "daily": 67,
-        "weekly": 67,
-        "alltime": 67,
-        "last_join": 1783090257588
+        "daily": 4198,
+        "weekly": 4198,
+        "alltime": 4198,
+        "last_join": 1783193772877
       },
       "1420032376574054400": {
-        "daily": 0,
-        "weekly": 0,
-        "alltime": 0,
-        "last_join": 1783089369825
+        "daily": 7849,
+        "weekly": 7849,
+        "alltime": 7849,
+        "last_join": 1783191814118
+      },
+      "1396352582737461311": {
+        "daily": 348,
+        "weekly": 348,
+        "alltime": 348,
+        "last_join": 1783196610407
       }
     }
   },
   "message_stats": {
     "1521929465817465005": {
       "812192341179236382": {
-        "daily": 9,
-        "weekly": 9,
-        "alltime": 9
+        "daily": 16,
+        "weekly": 16,
+        "alltime": 16
       }
     },
     "1502159810869858364": {
       "812192341179236382": {
-        "daily": 141,
-        "weekly": 141,
-        "alltime": 141
+        "daily": 194,
+        "weekly": 194,
+        "alltime": 194
       },
       "1417897433840484464": {
-        "daily": 435,
-        "weekly": 435,
-        "alltime": 435
+        "daily": 609,
+        "weekly": 609,
+        "alltime": 609
       },
       "1470676321083330604": {
-        "daily": 199,
-        "weekly": 199,
-        "alltime": 199
+        "daily": 702,
+        "weekly": 702,
+        "alltime": 702
       },
       "894759129699197008": {
         "daily": 33,
@@ -176,9 +176,9 @@
         "alltime": 6
       },
       "1420032376574054400": {
-        "daily": 22,
-        "weekly": 22,
-        "alltime": 22
+        "daily": 309,
+        "weekly": 309,
+        "alltime": 309
       }
     },
     "1510693342563012728": {
