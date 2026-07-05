@@ -116,6 +116,7 @@ registerRoleEvents(client);
 // ── RESTORE GIVEAWAY TIMERS + BOT STATUS ON READY ─────────────────────────────
 client.once('clientReady' as any, () => {
   setupGiveawayTimers(client);
+  setupAutoGiveawayScheduler(client);
   const statusType = getBotConfig('status_type');
   const statusText = getBotConfig('status_text');
   if (statusType && statusText) {
