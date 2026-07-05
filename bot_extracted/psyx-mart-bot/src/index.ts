@@ -1,7 +1,7 @@
 import http from 'http';
-import { ActivityType } from 'discord.js';
+import { ActivityType, EmbedBuilder } from 'discord.js';
 import { createClient } from './client.js';
-import { startStatResetScheduler, getBotConfig, getExpiredTempRoles, removeTempRole } from './database.js';
+import { startStatResetScheduler, getBotConfig, getExpiredTempRoles, removeTempRole, getDueReminders, markReminderSent } from './database.js';
 
 // Commands
 import moderation from './commands/moderation.js';
@@ -29,6 +29,7 @@ import vouchCommands from './commands/vouch.js';
 import sellCommands from './commands/sell.js';
 import whitelistCommands from './commands/whitelist.js';
 import socialCommands from './commands/social.js';
+import remindCommands from './commands/remind.js';
 
 // Events
 import registerReady from './events/ready.js';
@@ -70,6 +71,7 @@ const allCommands = [
   ...sellCommands,
   ...whitelistCommands,
   ...socialCommands,
+  ...remindCommands,
 ];
 
 for (const command of allCommands) {
@@ -101,6 +103,26 @@ setInterval(async () => {
   }
 }, 60_000);
 console.log('⏳ Temp role expiry scheduler started (checks every 60s)');
+
+// Reminder scheduler — check every 30 seconds
+setInterval(async () => {
+  const due = getDueReminders();
+  for (const r of due) {
+    markReminderSent(r.id);
+    try {
+      const user = await client.users.fetch(r.userId);
+      await user.send({ embeds: [
+        new EmbedBuilder()
+          .setColor(0x5865F2)
+          .setTitle('⏰  Reminder!')
+          .setDescription(`📝 **${r.message}**\n\n> Set <t:${Math.floor(r.createdAt / 1000)}:R>`)
+          .setFooter({ text: 'PSYX MART Bot • Reminder' })
+          .setTimestamp()
+      ] });
+    } catch { /* User has DMs off — skip silently */ }
+  }
+}, 30_000);
+console.log('⏰ Reminder scheduler started (checks every 30s)');
 
 // ── REGISTER EVENTS ───────────────────────────────────────────────────────────
 registerReady(client);
