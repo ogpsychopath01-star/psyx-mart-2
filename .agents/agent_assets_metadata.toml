@@ -12,3 +12,9 @@ id = "6pNthv1XmXXDjFejd_hlY"
 uri = "file://psyx-mart-bot-final.tar.gz"
 type = "unspecified"
 title = "PSYX MART Bot — Final Build"
+
+[[outputs]]
+id = "EaPyzuTx8Vy1-Mwgc6S9F"
+uri = "file://psyx-mart-bot-deploy.tar.gz"
+type = "unspecified"
+title = "PSYX MART Bot — Deployment Package"

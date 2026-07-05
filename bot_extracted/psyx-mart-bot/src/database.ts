@@ -86,6 +86,7 @@ interface DbData {
   disabled_global_commands: string[];
   disabled_global_categories: string[];
   auto_giveaways: Record<string, AutoGiveaway>;
+  reminders: Reminder[];
 }
 
 interface Warning { id: number; guild_id: string; user_id: string; reason: string; moderator_id: string; timestamp: number }
@@ -126,6 +127,17 @@ export interface Giveaway {
   winnerCount: number;
   ended: boolean;
   winners: string[];
+}
+
+export interface Reminder {
+  id: string;
+  userId: string;
+  channelId: string;
+  guildId: string;
+  message: string;
+  dueAt: number;
+  createdAt: number;
+  sent: boolean;
 }
 
 export interface AutoGiveaway {
@@ -172,6 +184,7 @@ let data: DbData = {
   disabled_global_commands: [],
   disabled_global_categories: [],
   auto_giveaways: {},
+  reminders: [],
 };
 
 let saveTimeout: NodeJS.Timeout | null = null;
@@ -490,6 +503,26 @@ export function createAutoGiveaway(id: string, guildId: string, channelId: strin
   save();
   return entry;
 }
+// ── REMINDERS ─────────────────────────────────────────────────────────────────
+export function createReminder(userId: string, channelId: string, guildId: string, message: string, dueAt: number): string {
+  if (!data.reminders) data.reminders = [];
+  const id = `r_${userId}_${Date.now()}`;
+  data.reminders.push({ id, userId, channelId, guildId, message, dueAt, createdAt: Date.now(), sent: false });
+  save();
+  return id;
+}
+export function getUserReminders(userId: string): Reminder[] { return (data.reminders ?? []).filter(r => r.userId === userId && !r.sent); }
+export function getDueReminders(): Reminder[] { return (data.reminders ?? []).filter(r => !r.sent && r.dueAt <= Date.now()); }
+export function markReminderSent(id: string) {
+  const r = (data.reminders ?? []).find(x => x.id === id);
+  if (r) { r.sent = true; save(); }
+}
+export function deleteReminder(id: string) {
+  if (!data.reminders) return;
+  data.reminders = data.reminders.filter(r => r.id !== id);
+  save();
+}
+
 export function getAutoGiveaway(id: string): AutoGiveaway | undefined { return data.auto_giveaways?.[id]; }
 export function getAllAutoGiveaways(): Record<string, AutoGiveaway> { return data.auto_giveaways ?? {}; }
 export function updateAutoGiveawayLastRun(id: string, ts: number) { if (data.auto_giveaways?.[id]) { data.auto_giveaways[id].lastRun = ts; save(); } }

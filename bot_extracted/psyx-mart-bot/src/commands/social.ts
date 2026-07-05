@@ -65,120 +65,177 @@ const socialCommands: BotCommand[] = [
   // ── STAIN / PLAY (VIDEO EMBED + INLINE PLAYER) ────────────────────────
   {
     name: 'stain',
-    description: 'Drop any video link — bot removes your message and plays the video inline with a beautiful embed',
+    description: 'Drop any video link — bot removes your message and plays the video inline in HD with a beautiful embed',
     category: 'Social',
-    aliases: ['play', 'media', 'link', 'preview', 'embed', 'show', 'drop'],
+    aliases: ['play', 'media', 'link', 'preview', 'embed', 'show', 'drop', 'vid', 'video'],
     usage: 'stain <url>',
     async execute(message, args) {
       const url = args[0];
       if (!url || !url.startsWith('http')) {
         return message.reply({ embeds: [errorEmbed('Missing Link',
-          'Drop a video link and I\'ll play it in chat!\n\n' +
+          'Drop any video link and I\'ll play it inline in chat!\n\n' +
           '**Example:** `!stain https://youtu.be/dQw4w9WgXcQ`\n\n' +
-          '**Supported:** YouTube • TikTok • Instagram • Twitter/X • Reddit • Twitch • Spotify • SoundCloud • Vimeo • and more'
+          '🎬 **Supported:** YouTube • TikTok • Instagram • Twitter/X • Reddit • Twitch • Vimeo • Pinterest • and more'
         )] });
       }
 
       const platform = detectPlatform(url);
-      const color   = platformColors[platform] || 0x6C63FF;
-      const emoji   = platformEmojis[platform] || '🔗';
-
-      const platformName: Record<string, string> = {
+      const color    = platformColors[platform] || 0x6C63FF;
+      const emoji    = platformEmojis[platform] || '🔗';
+      const PNAMES: Record<string, string> = {
         youtube: 'YouTube', instagram: 'Instagram', tiktok: 'TikTok',
         twitter: 'Twitter / X', reddit: 'Reddit', twitch: 'Twitch',
         spotify: 'Spotify', soundcloud: 'SoundCloud', vimeo: 'Vimeo',
         facebook: 'Facebook', other: 'Web',
       };
-      const pName = platformName[platform] || 'Media';
+      const pName = PNAMES[platform] || 'Media';
 
-      // Show loading state
+      // Loading indicator
       const loadMsg = await message.reply({ embeds: [new EmbedBuilder()
         .setColor(color as any)
-        .setTitle(`${emoji}  Fetching video...`)
-        .setDescription(`> Extracting **${pName}** content for <@${message.author.id}>`)
+        .setTitle(`${emoji}  Extracting video...`)
+        .setDescription(`> Fetching **${pName}** in high quality for <@${message.author.id}>\n> *This takes 2–5 seconds...*`)
         .setFooter(BOT_FOOTER)
       ] });
 
-      // ── STEP 1: Try cobalt.tools to get a direct video stream URL ──────
+      // ── STEP 1: Fetch video metadata in parallel with cobalt request ───
       let directVideoUrl: string | null = null;
-      let cobaltPicker: string[] = [];
-
-      try {
-        const cobalt = await axios.post('https://api.cobalt.tools/', { url }, {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          timeout: 15000,
-        });
-        const d = cobalt.data as any;
-        if ((d.status === 'stream' || d.status === 'redirect' || d.status === 'tunnel') && d.url) {
-          directVideoUrl = d.url;
-        } else if (d.status === 'picker' && Array.isArray(d.picker)) {
-          cobaltPicker = (d.picker as any[]).map((p: any) => p.url).filter(Boolean).slice(0, 3);
-          directVideoUrl = cobaltPicker[0] ?? null;
-        }
-      } catch { /* cobalt unavailable — fall through to OG embed */ }
-
-      // ── STEP 2: Fetch metadata for the embed ──────────────────────────
       let title = '', description = '', thumb = '', author = '';
 
-      if (platform === 'youtube') {
-        try {
-          const oe = await axios.get(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`, { timeout: 8000 });
-          const d = oe.data as any;
+      const [cobaltResult, metaResult] = await Promise.allSettled([
+        // Cobalt.tools — extract direct HD video stream
+        axios.post('https://api.cobalt.tools/', {
+          url,
+          videoQuality:      '1080',
+          youtubeVideoCodec: 'h264',
+          filenameStyle:     'basic',
+          downloadMode:      'auto',
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept':       'application/json',
+            'User-Agent':   'Mozilla/5.0 (compatible; DiscordBot/2.0; PSYXMARTBot)',
+          },
+          timeout: 20000,
+        }),
+        // Metadata — YouTube oEmbed or OG tags
+        platform === 'youtube'
+          ? axios.get(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`, { timeout: 8000 })
+          : fetchOgTags(url),
+      ]);
+
+      // Parse cobalt result
+      if (cobaltResult.status === 'fulfilled') {
+        const d = cobaltResult.value.data as any;
+        if ((d.status === 'stream' || d.status === 'redirect' || d.status === 'tunnel') && d.url) {
+          directVideoUrl = d.url as string;
+        } else if (d.status === 'picker' && Array.isArray(d.picker) && d.picker.length) {
+          directVideoUrl = (d.picker[0]?.url ?? null) as string | null;
+        }
+      }
+
+      // Parse metadata result
+      if (metaResult.status === 'fulfilled') {
+        if (platform === 'youtube') {
+          const d = (metaResult.value as any).data;
           title  = d.title ?? '';
           author = d.author_name ?? '';
           const vid = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
-          thumb  = vid ? `https://img.youtube.com/vi/${vid[1]}/maxresdefault.jpg` : (d.thumbnail_url ?? '');
-        } catch {
-          const og = await fetchOgTags(url);
-          title = og.title ?? ''; thumb = og.image ?? '';
+          thumb  = vid
+            ? `https://img.youtube.com/vi/${vid[1]}/maxresdefault.jpg`
+            : (d.thumbnail_url ?? '');
+        } else {
+          const og = metaResult.value as any;
+          title       = og.title ?? '';
+          description = og.description ?? '';
+          thumb       = og.image ?? '';
+          author      = og.site_name ?? '';
         }
-      } else {
-        const og = await fetchOgTags(url);
-        title       = og.title ?? '';
-        description = og.description ?? '';
-        thumb       = og.image ?? '';
-        author      = og.site_name ?? '';
       }
 
-      // ── STEP 3: Delete user's original message (clean hand-off) ───────
-      try { await message.delete(); } catch { /* no permission — skip */ }
+      // ── STEP 2: Delete user's original message ─────────────────────────
+      try { await message.delete(); } catch { /* no Manage Messages — skip */ }
 
-      // ── STEP 4: Build the aesthetic embed ────────────────────────────
-      const hasVideo = !!directVideoUrl;
+      // ── STEP 3: Build the platform-themed embed ────────────────────────
+      const displayTitle = (title || `${pName} Video`).slice(0, 256);
 
       const embed = new EmbedBuilder()
         .setColor(color as any)
-        .setTitle(`${emoji}  ${title || `${pName} Content`}`.slice(0, 256))
+        .setTitle(`${emoji}  ${displayTitle}`)
         .setURL(url)
-        .setDescription(
-          (description ? `> ${description.slice(0, 200)}\n\n` : '') +
-          `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `👤  Shared by <@${message.author.id}>` +
-          (hasVideo ? '\n🎬  **Video is playing below ↓**' : '')
-        )
-        .addFields(
-          { name: `${emoji} Platform`, value: pName, inline: true },
-          { name: '🔗 Open Link', value: `[Watch on ${pName}](${url})`, inline: true },
-        )
         .setFooter({ text: `${pName} • Shared by ${message.author.tag} • PSYX MART Bot` })
         .setTimestamp();
 
-      if (author && !title.includes(author)) embed.setAuthor({ name: author });
-      if (thumb && !hasVideo) embed.setImage(thumb);
-      else if (thumb) embed.setThumbnail(thumb);
+      if (author && !title.toLowerCase().includes(author.toLowerCase()))
+        embed.setAuthor({ name: `${emoji} ${author}` });
 
-      // ── STEP 5: Send the embed + video (Discord auto-renders video URL) 
-      if (directVideoUrl) {
-        // Send embed first, then video URL — Discord plays the video inline
-        await loadMsg.edit({ embeds: [embed] });
-        await message.channel.send({ content: directVideoUrl });
-      } else {
-        // Fallback: cobalt failed — show metadata embed with thumbnail
+      // ── STEP 4: Decide send strategy ──────────────────────────────────
+      //
+      //  YouTube:  Discord auto-embeds YT links with a full preview card +
+      //            play button — sending the URL alone (no bot embed) gives
+      //            the best native player. We pair it with a thin "shared by"
+      //            embed sent first so the context is visible.
+      //
+      //  Others:   Cobalt returns a direct mp4/stream URL. Discord renders
+      //            a direct video URL as an inline video player EVEN when
+      //            bot embeds are present (it only suppresses link-preview
+      //            cards, not actual media). So we send both together.
+
+      if (platform === 'youtube') {
+        // Two-message pattern: metadata embed → YouTube native player card
+        const ytEmbed = new EmbedBuilder()
+          .setColor(color as any)
+          .setTitle(`${emoji}  ${displayTitle}`)
+          .setURL(url)
+          .setDescription(
+            (description ? `> ${description.slice(0, 180)}\n\n` : '') +
+            `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤  Shared by <@${message.author.id}>\n` +
+            `▶️  Playing below ↓`
+          )
+          .setThumbnail(thumb || null)
+          .addFields(
+            { name: '📺 Channel', value: author || 'YouTube', inline: true },
+            { name: '🔗 Watch', value: `[Open on YouTube](${url})`, inline: true },
+          )
+          .setFooter({ text: `YouTube • Shared by ${message.author.tag} • PSYX MART Bot` })
+          .setTimestamp();
+
+        await loadMsg.edit({ embeds: [ytEmbed] });
+        // Send the YouTube URL — Discord renders its native preview card (thumbnail + play button)
+        await message.channel.send({ content: directVideoUrl ?? url });
+
+      } else if (directVideoUrl) {
+        // Cobalt succeeded — direct mp4/stream URL → inline video player + embed together
         embed.setDescription(
-          (description ? `> ${description.slice(0, 250)}\n\n` : '') +
+          (description ? `> ${description.slice(0, 160)}\n\n` : '') +
           `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `👤  Shared by <@${message.author.id}>\n` +
-          `🔗  **[Click to watch on ${pName} ↗](${url})**`
+          `🎬  **Playing below ↓  (1080p)**`
+        );
+        if (thumb) embed.setThumbnail(thumb);
+        embed.addFields(
+          { name: `${emoji} Platform`, value: pName, inline: true },
+          { name: '🔗 Original', value: `[Open on ${pName}](${url})`, inline: true },
+        );
+
+        // mp4/stream URL renders as inline video even alongside bot embeds
+        await loadMsg.edit({ embeds: [embed] });
+        await message.channel.send({ content: directVideoUrl });
+
+      } else {
+        // Cobalt failed — show rich thumbnail embed with a watch link
+        embed.setDescription(
+          (description ? `> ${description.slice(0, 200)}\n\n` : '') +
+          `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+          `👤  Shared by <@${message.author.id}>\n` +
+          `🔗  **[Click to watch on ${pName} ↗](${url})**\n\n` +
+          `> ⚠️ *Inline playback unavailable for this link.*`
+        );
+        if (thumb) embed.setImage(thumb);
+        embed.addFields(
+          { name: `${emoji} Platform`, value: pName, inline: true },
+          { name: '🔗 Watch', value: `[Open on ${pName}](${url})`, inline: true },
         );
         await loadMsg.edit({ embeds: [embed] });
       }
