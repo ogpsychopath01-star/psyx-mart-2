@@ -203,7 +203,7 @@ const socialCommands: BotCommand[] = [
 
         await loadMsg.edit({ embeds: [ytEmbed] });
         // Send the YouTube URL — Discord renders its native preview card (thumbnail + play button)
-        await message.channel.send({ content: directVideoUrl ?? url });
+        await (message.channel as any).send({ content: directVideoUrl ?? url });
 
       } else if (directVideoUrl) {
         // Cobalt succeeded — direct mp4/stream URL → inline video player + embed together
@@ -221,7 +221,7 @@ const socialCommands: BotCommand[] = [
 
         // mp4/stream URL renders as inline video even alongside bot embeds
         await loadMsg.edit({ embeds: [embed] });
-        await message.channel.send({ content: directVideoUrl });
+        await (message.channel as any).send({ content: directVideoUrl });
 
       } else {
         // Cobalt failed — show rich thumbnail embed with a watch link
@@ -670,7 +670,7 @@ const socialCommands: BotCommand[] = [
         const posts = res.data?.data?.children?.filter((p: any) => !p.data.stickied && !p.data.over_18) || [];
         if (!posts.length) return message.reply({ embeds: [errorEmbed('No Posts', `Could not find posts in **r/${sub}**. The subreddit may not exist or be empty.`)] });
 
-        const post = pick(posts).data;
+        const post = (pick(posts) as any).data;
         const isImage = post.url?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
 
         const embed = new EmbedBuilder()

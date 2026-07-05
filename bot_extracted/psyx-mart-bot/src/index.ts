@@ -30,6 +30,7 @@ import sellCommands from './commands/sell.js';
 import whitelistCommands from './commands/whitelist.js';
 import socialCommands from './commands/social.js';
 import remindCommands from './commands/remind.js';
+import pollCommands from './commands/poll.js';
 
 // Events
 import registerReady from './events/ready.js';
@@ -72,6 +73,7 @@ const allCommands = [
   ...whitelistCommands,
   ...socialCommands,
   ...remindCommands,
+  ...pollCommands,
 ];
 
 for (const command of allCommands) {
